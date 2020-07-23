@@ -21,6 +21,13 @@ node {
         sh "docker push sreeragksree/cicd:demo"
 }
     }
+    stage('pcf'){
+        withCredentials([usernamePassword(credentialsId: 'pcf', passwordVariable: 'PCFPASSWORD', usernameVariable: 'PCFUSERNAME')]) {
+        sh "cf login -a https://api.run.pivotal.io --skip-ssl-validation -u $PCFUSERNAME -p $PCFPASSWORD -o cicd-demo-org -s development"
+        sh "cf push my-test-app --docker-image sreeragksree/cicd:demo --random-route"
+        
+}
+    }
     
 
 }
